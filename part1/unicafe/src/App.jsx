@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 const Button = ({text, onClick}) => <button onClick={onClick}>{text}</button>
 
-const Stats = ({text, val}) => {
+const StatisticLine = ({text, val}) => {
   if(text == 'positive'){
     return (
       <p>{text}: {val} %</p>
@@ -15,19 +15,19 @@ const Stats = ({text, val}) => {
 
 const Statistics = ({good, neutral, bad, total}) => {
   const calcAvg = () => (good*1 + neutral*0 + bad*(-1)) / total
-  
+
   const calcPosPercent = () => (good / total) * 100
 
   if(total > 0) {
     return (
       <>
         <h2>Statistics</h2>
-        <Stats text={'good'} val={good} />
-        <Stats text={'neutral'} val={neutral} />
-        <Stats text={'bad'} val={bad} />
-        <Stats text={'total'} val={total} />
-        <Stats text={'average'} val={calcAvg()} />
-        <Stats text={'positive'} val={calcPosPercent()} />
+        <StatisticLine text={'good'} val={good} />
+        <StatisticLine text={'neutral'} val={neutral} />
+        <StatisticLine text={'bad'} val={bad} />
+        <StatisticLine text={'total'} val={total} />
+        <StatisticLine text={'average'} val={calcAvg()} />
+        <StatisticLine text={'positive'} val={calcPosPercent()} />
       </>
     )
   }
