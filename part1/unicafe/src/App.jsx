@@ -13,6 +13,35 @@ const Stats = ({text, val}) => {
   )
 }
 
+const Statistics = ({good, neutral, bad, total}) => {
+  const calcAvg = () => {
+    if(total > 0){
+      return (good*1 + neutral*0 + bad*(-1)) / total
+    }
+    return 0
+  }
+
+  const calcPosPercent = () => {
+    if(total > 0){
+      return (good / total) * 100
+    }
+    return 0
+  }
+
+  return (
+    <>
+      <h2>Statistics</h2>
+      <Stats text={'good'} val={good} />
+      <Stats text={'neutral'} val={neutral} />
+      <Stats text={'bad'} val={bad} />
+      <Stats text={'total'} val={total} />
+      <Stats text={'average'} val={calcAvg()} />
+      <Stats text={'positive'} val={calcPosPercent()} />
+    </>
+  )
+}
+
+
 const App = () => {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
@@ -38,19 +67,6 @@ const App = () => {
     setTotal(updBad + neutral + good)
   }
 
-  const calcAvg = () => {
-    if(total > 0){
-      return (good*1 + neutral*0 + bad*(-1)) / total
-    }
-    return 0
-  }
-
-  const calcPosPercent = () => {
-    if(total > 0){
-      return (good / total) * 100
-    }
-    return 0
-  }
 
 
   return (
@@ -61,14 +77,7 @@ const App = () => {
         <Button text={'neutral'} onClick={handleNeutralClick} />
         <Button text={'bad'} onClick={handleBadClick} />
       </div>
-      <h2>
-        <Stats text={'good'} val={good} />
-        <Stats text={'neutral'} val={neutral} />
-        <Stats text={'bad'} val={bad} />
-        <Stats text={'total'} val={total} />
-        <Stats text={'average'} val={calcAvg()} />
-        <Stats text={'positive'} val={calcPosPercent()} />
-      </h2>
+      <Statistics good={good} neutral={neutral} bad={bad} total={total} />
     </div>
   )
 }
