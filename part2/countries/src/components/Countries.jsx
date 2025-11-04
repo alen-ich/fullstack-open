@@ -1,6 +1,6 @@
 import CountryData from './CountryData'
 
-const Countries = ({countries, countryData, onShowCountry}) => {
+const Countries = ({countries, countryData, weather, onShowCountry}) => {
     if(countries.length > 10){
         return (
             <p>Too many matches, specify another filter</p>
@@ -11,7 +11,7 @@ const Countries = ({countries, countryData, onShowCountry}) => {
         )
     }else if(countryData){
         return (
-            <CountryData country={countryData} />
+            <CountryData country={countryData} weather={weather} />
         )
     }
     return (
