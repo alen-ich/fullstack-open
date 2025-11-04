@@ -1,9 +1,16 @@
-const Contacts = ({contacts}) => {
+const Contacts = ({contacts, onDelete}) => {
     return(
         <>
             <h2>Numbers</h2>
             <div>
-                {contacts.map(contact => <p key={contact.id}>{contact.name} {contact.number}</p>)}
+                {contacts.map(contact => {
+                    return (
+                        <div key={contact.id}>
+                            <span>{contact.name} {contact.number}</span>
+                            <button onClick={() => onDelete(contact)}>delete</button>
+                        </div>
+                    )
+                })}
             </div>
         </>
     )

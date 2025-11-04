@@ -18,9 +18,7 @@ const App = () => {
 
   const handleNumberChange = event => setNewNumber(event.target.value)
 
-  const handleFilterNameChange = event => {
-    setFilterName(event.target.value)
-  }
+  const handleFilterNameChange = event => setFilterName(event.target.value)
 
   const addContact = event => {
     event.preventDefault()
@@ -40,6 +38,13 @@ const App = () => {
     setNewNumber('')
   }
 
+  const handleDelete = contact => {
+    if(window.confirm(`Delete ${contact.name} ?`)) {
+    contactsService.deleteContact(contact.id)
+      .then(response => setPersons(persons.filter(person => person.id !== response.id)))
+    }
+  }
+
   useEffect(() => {
     contactsService.getContacts()
       .then(response => setPersons(response))
@@ -56,7 +61,7 @@ const App = () => {
         onNameChange={handleNameChange}
         onNumberChange={handleNumberChange}
       />
-      <Contacts contacts={persons} />
+      <Contacts contacts={persons} onDelete={handleDelete} />
     </div>
   )
 }
