@@ -22,9 +22,16 @@ const App = () => {
 
   const addContact = event => {
     event.preventDefault()
-    const checkName = persons.some(person => person.name === newName)
-    if(checkName){
-      alert(`${newName} is already added to phonebook`)
+    const personExist = persons.find(person => person.name === newName)
+    if(personExist){
+      if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+        const updContact = {
+          ...personExist,
+          number: newNumber
+        }
+        contactsService.updateContact(updContact)
+          .then(response => setPersons(persons.map(person => person.id === updContact.id ? response : person)))
+      }
     }
     else{
       const newContact = {
@@ -43,6 +50,10 @@ const App = () => {
     contactsService.deleteContact(contact.id)
       .then(response => setPersons(persons.filter(person => person.id !== response.id)))
     }
+  }
+
+  const handleUpdate = contact => {
+
   }
 
   useEffect(() => {
