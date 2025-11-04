@@ -1,6 +1,6 @@
 import CountryData from './CountryData'
 
-const Countries = ({countries, countryData}) => {
+const Countries = ({countries, countryData, onShowCountry}) => {
     if(countries.length > 10){
         return (
             <p>Too many matches, specify another filter</p>
@@ -9,14 +9,17 @@ const Countries = ({countries, countryData}) => {
         return (
             <p>No countries found</p>
         )
-    }else if(countries.length === 1 && countryData){
+    }else if(countryData){
         return (
             <CountryData country={countryData} />
         )
     }
     return (
         <ul>
-            {countries.map(country => <li key={country.cca3}>{country.name.common}</li>)}
+            {countries.map(country => <li key={country.cca3}>
+                <span>{country.name.common}</span>
+                <button onClick={() => {onShowCountry(country.name.common)}}>show</button>
+            </li>)}
         </ul>
     )
 }

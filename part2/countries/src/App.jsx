@@ -10,7 +10,17 @@ function App() {
 
   const countriesToShow = countries.filter(country => country.name.common.toLowerCase().includes(searchString.toLowerCase()))
 
-  const handleSearchStringChange = event => setSearchString(event.target.value) 
+  const handleSearchStringChange = event => {
+    setSearchString(event.target.value) 
+    if(searchString.length === 0){
+      setCountryData(null)
+    }
+  }
+
+  const handleShowCountry = countryName => {
+    countriesService.getCountry(countryName.toLowerCase())
+      .then(res => setCountryData(res))
+  }
 
   useEffect(() => {
     countriesService.getAll()
@@ -27,7 +37,7 @@ function App() {
   return (
     <>
       <CountrySearch searchString={searchString} onSearch={handleSearchStringChange} />
-      <Countries countries={countriesToShow} countryData={countryData} />
+      <Countries countries={countriesToShow} countryData={countryData} onShowCountry={handleShowCountry} />
     </>
   )
 }
