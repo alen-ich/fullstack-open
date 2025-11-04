@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import contactsService from './services/contacts'
 import NewContactForm from './components/NewContactForm'
 import Contacts from './components/Contacts'
 import Filter from './components/Filter'
@@ -20,7 +20,6 @@ const App = () => {
 
   const handleFilterNameChange = event => {
     setFilterName(event.target.value)
-    
   }
 
   const addContact = event => {
@@ -32,23 +31,18 @@ const App = () => {
     else{
       const newContact = {
         name: newName,
-        number: newNumber,
-        id: persons.length + 1
+        number: newNumber
       }
-      axios
-        .post('http://localhost:3001/persons', newContact)
-        .then(response => {
-          setPersons(persons.concat(response.data))
-        })
+      contactsService.createContact(newContact)
+        .then(response => setPersons(persons.concat(response)))
     }
     setNewName('')
     setNewNumber('')
   }
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => setPersons(response.data))
+    contactsService.getContacts()
+      .then(response => setPersons(response))
   }, [])
 
   return (
@@ -62,7 +56,7 @@ const App = () => {
         onNameChange={handleNameChange}
         onNumberChange={handleNumberChange}
       />
-      <Contacts contacts={personsToShow} />
+      <Contacts contacts={persons} />
     </div>
   )
 }
