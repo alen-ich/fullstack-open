@@ -3,12 +3,14 @@ import contactsService from './services/contacts'
 import NewContactForm from './components/NewContactForm'
 import Contacts from './components/Contacts'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
+  const [message, setMessage] = useState(null)
 
   const personsToShow = filterName.length
     ? persons.filter(person => person.name.toLowerCase().includes(filterName.toLowerCase()))
@@ -30,7 +32,13 @@ const App = () => {
           number: newNumber
         }
         contactsService.updateContact(updContact)
-          .then(response => setPersons(persons.map(person => person.id === updContact.id ? response : person)))
+          .then(response => {
+            setPersons(persons.map(person => person.id === updContact.id ? response : person))
+            setMessage(`Updated ${response.name}`)
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
+          })
       }
     }
     else{
@@ -39,7 +47,13 @@ const App = () => {
         number: newNumber
       }
       contactsService.createContact(newContact)
-        .then(response => setPersons(persons.concat(response)))
+        .then(response => {
+          setPersons(persons.concat(response))
+            setMessage(`Added ${response.name}`)
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
+        })
     }
     setNewName('')
     setNewNumber('')
@@ -52,10 +66,6 @@ const App = () => {
     }
   }
 
-  const handleUpdate = contact => {
-
-  }
-
   useEffect(() => {
     contactsService.getContacts()
       .then(response => setPersons(response))
@@ -64,6 +74,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={message} />
       <Filter filterName={filterName} onFilterChange={handleFilterNameChange} />
       <NewContactForm 
         newName={newName} 
@@ -72,7 +83,7 @@ const App = () => {
         onNameChange={handleNameChange}
         onNumberChange={handleNumberChange}
       />
-      <Contacts contacts={persons} onDelete={handleDelete} />
+      <Contacts contacts={personsToShow} onDelete={handleDelete} />
     </div>
   )
 }
